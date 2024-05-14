@@ -1,9 +1,11 @@
-import { ProjectListScreen } from "./screens/project-list/index";
+// import { ProjectListScreen } from "screens/project-list";
+import { LoginScreen } from "screens/login";
 
 function App() {
   return (
     <div>
-      <ProjectListScreen></ProjectListScreen>
+      {/* <ProjectListScreen></ProjectListScreen> */}
+      <LoginScreen></LoginScreen>
     </div>
   );
 }
