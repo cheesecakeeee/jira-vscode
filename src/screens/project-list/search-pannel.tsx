@@ -1,6 +1,7 @@
 export interface IUser {
   name: string;
   id: string;
+  token: string;
 }
 
 interface ISearchPannelProps {
