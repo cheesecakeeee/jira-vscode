@@ -1,5 +1,6 @@
 import qs from "qs";
 import * as auth from "auth-provider";
+import { useAuth } from "context/auth-context";
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -10,7 +11,7 @@ interface IRequestType extends RequestInit {
 
 export const http = async (
   enterpoint: string,
-  { data, headers, token, ...customConfig }: IRequestType,
+  { data, headers, token, ...customConfig }: IRequestType = {},
 ) => {
   const config = {
     method: "GET",
@@ -42,4 +43,10 @@ export const http = async (
       return Promise.reject(data);
     }
   });
+};
+
+export const useHttp = () => {
+  const { user } = useAuth();
+  return (...[enterpoint, config]: Parameters<typeof http>) =>
+    http(enterpoint, { ...config, token: user?.token });
 };
