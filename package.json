@@ -10,6 +10,7 @@
     "@types/node": "^16.18.96",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
+    "antd": "^5.17.2",
     "jira-dev-tool": "^2.0.7",
     "qs": "^6.12.1",
     "react": "^18.2.0",
@@ -46,8 +47,8 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.2.2",
-    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/cli": "^16.2.1",
+    "@commitlint/config-conventional": "^16.2.1",
     "eslint-config-prettier": "^9.1.0",
     "json-server": "^0.17.0",
     "prettier": "3.2.5"

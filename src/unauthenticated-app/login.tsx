@@ -1,28 +1,37 @@
+import { Form, Input, Button, Card, ConfigProvider } from "antd";
 import { useAuth } from "context/auth-context";
 
 export const LoginScreen = () => {
   const { login, user } = useAuth();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const username = (event.currentTarget.elements[0] as HTMLInputElement)
-      .value;
-    const password = (event.currentTarget.elements[1] as HTMLInputElement)
-      .value;
-    login({ username, password });
+  const handleSubmit = (value: { username: string; password: string }) => {
+    login(value);
   };
+
   return (
-    <form onSubmit={handleSubmit}>
-      {user ? <div>登录成功，欢迎{user?.name}</div> : null}
-      <div>
-        <label htmlFor="username">用户名：</label>
-        <input type="text" placeholder="请输入用户名" />
-      </div>
-      <div>
-        <label htmlFor="password">密码：</label>
-        <input type="password" placeholder="请输入密码" />
-      </div>
-      <button type="submit">登录</button>
-    </form>
+    <Card>
+      <Form onFinish={handleSubmit}>
+        {user ? <div>登录成功，欢迎{user?.name}</div> : null}
+        <Form.Item
+          label="用户名："
+          name="username"
+          rules={[{ required: true, message: "Please input your username!" }]}
+        >
+          <Input placeholder="请输入用户名" />
+        </Form.Item>
+        <Form.Item
+          label="密码："
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password placeholder="请输入密码" />
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            登录
+          </Button>
+        </Form.Item>
+      </Form>
+    </Card>
   );
 };
