@@ -1,5 +1,6 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { useAuth } from "context/auth-context";
+import { LongButton } from "unauthenticated-app";
 
 export const RegisterScreen = () => {
   const { register } = useAuth();
@@ -10,22 +11,20 @@ export const RegisterScreen = () => {
   return (
     <Form onFinish={handleSubmit}>
       <Form.Item
-        label="用户名："
         name="username"
         rules={[{ required: true, message: "Please input your username!" }]}
       >
-        <Input placeholder="请输入用户名" />
+        <Input placeholder={"用户名"} />
       </Form.Item>
       <Form.Item
-        label="密码："
         name="password"
         rules={[{ required: true, message: "Please input your password!" }]}
       >
-        <Input.Password placeholder="请输入密码" />
+        <Input.Password placeholder={"密码"} />
       </Form.Item>
-      <Button htmlType="submit" type="primary">
+      <LongButton htmlType="submit" type="primary">
         注册
-      </Button>
+      </LongButton>
     </Form>
   );
 };
