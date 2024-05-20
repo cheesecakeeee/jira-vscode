@@ -18,6 +18,7 @@ export const ProjectListScreen = () => {
     client("projects", {
       data: cleanObject(debounceParams),
     }).then(setList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceParams]);
 
   const [users, setUsers] = useState([]);

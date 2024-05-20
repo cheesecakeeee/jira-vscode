@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 
 const isFalsy = (value: unknown) => {
-  // 空字符串 、 null、 undefined返回true
-  return value === 0 ? false : !value;
+  // 空字符串 、 null、 undefined返回true  ; 0和false 要保留不删除
+  return value === null || value === undefined || value === "";
 };
 
-export const cleanObject = (obj: Object) => {
+export const cleanObject = (obj: { [key: string]: unknown }) => {
   let newObj = { ...obj };
   let keys = Object.keys(newObj);
   keys.forEach((key) => {
-    //@ts-ignore
     let value = newObj[key];
     if (isFalsy(value)) {
-      //@ts-ignore
       delete newObj[key];
     }
   });

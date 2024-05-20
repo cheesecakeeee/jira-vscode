@@ -14,10 +14,11 @@
     "@types/react-dom": "^18.2.25",
     "antd": "^5.17.2",
     "dayjs": "^1.11.11",
-    "jira-dev-tool": "^2.0.7",
+    "jira-dev-tool": "^2.0.6",
     "qs": "^6.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
