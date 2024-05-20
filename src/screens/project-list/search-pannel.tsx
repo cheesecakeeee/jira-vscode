@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { Form, Input, Select } from "antd";
 
 export interface IUser {
@@ -21,26 +22,31 @@ export const SearchPannel = ({
   users,
 }: ISearchPannelProps) => {
   return (
-    <Form>
-      <Input
-        type="text"
-        value={params.name}
-        onChange={(evt) => setParams({ ...params, name: evt.target.value })}
-      />
-      <Select
-        id=""
-        value={params.personId}
-        onChange={(value) => setParams({ ...params, personId: value })}
-      >
-        <Select.Option value={""}>负责人</Select.Option>
-        {users?.map((user) => {
-          return (
-            <Select.Option key={user.id} value={user.id}>
-              {user.name}
-            </Select.Option>
-          );
-        })}
-      </Select>
+    <Form layout="inline" css={{ marginBottom: "2rem" }}>
+      <Form.Item>
+        <Input
+          placeholder="项目名"
+          type="text"
+          value={params.name}
+          onChange={(evt) => setParams({ ...params, name: evt.target.value })}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Select
+          id=""
+          value={params.personId}
+          onChange={(value) => setParams({ ...params, personId: value })}
+        >
+          <Select.Option value={""}>负责人</Select.Option>
+          {users?.map((user) => {
+            return (
+              <Select.Option key={user.id} value={user.id}>
+                {user.name}
+              </Select.Option>
+            );
+          })}
+        </Select>
+      </Form.Item>
     </Form>
   );
 };

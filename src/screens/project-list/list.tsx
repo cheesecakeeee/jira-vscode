@@ -1,5 +1,6 @@
 import { Table } from "antd";
 import { IUser } from "./search-pannel";
+import dayjs from "dayjs";
 
 export interface IProject {
   id: string;
@@ -7,6 +8,7 @@ export interface IProject {
   personId: string;
   organization: string;
   created: number;
+  pin: boolean;
 }
 
 interface IListProps {
@@ -27,11 +29,29 @@ export const List = ({ list, users }: IListProps) => {
           sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
+          title: "部门",
+          dataIndex: "organization",
+        },
+        {
           title: "负责人",
           render(value, project) {
             return (
               <span>
                 {users.find((user) => user.id === project.personId)?.name}
+              </span>
+            );
+          },
+        },
+        {
+          title: "创建时间",
+          dataIndex: "created",
+          key: "created",
+          render(value: any, project: IProject) {
+            return (
+              <span>
+                {project.created
+                  ? dayjs(project.created).format("YYYY-MM-DD")
+                  : "无"}
               </span>
             );
           },
