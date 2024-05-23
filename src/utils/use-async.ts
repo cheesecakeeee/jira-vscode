@@ -12,7 +12,18 @@ const defaultIntialState: State<null> = {
   stat: "idle",
 };
 
-export const useAsync = <D>(initialState?: State<D>) => {
+const defaultConfig = {
+  throwOnError: false,
+};
+
+export const useAsync = <D>(
+  initialState?: State<D>,
+  initialConfig?: typeof defaultConfig,
+) => {
+  const config = {
+    ...defaultConfig,
+    ...initialConfig,
+  };
   const [state, setState] = useState({
     ...defaultIntialState,
     ...initialState,
@@ -31,8 +42,8 @@ export const useAsync = <D>(initialState?: State<D>) => {
       stat: "error",
     });
 
-  const run = (promise: Promise<D>) => {
-    if (!promise || !promise.then()) {
+  const run = async (promise: Promise<D>) => {
+    if (!promise || !promise.then) {
       throw new Error("请传入promise");
     }
     setState({ ...state, stat: "loading" });
@@ -43,6 +54,8 @@ export const useAsync = <D>(initialState?: State<D>) => {
       })
       .catch((error) => {
         setError(error);
+        console.log(config);
+        if (config.throwOnError) return Promise.reject(error);
         return error;
       });
   };
