@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const isFalsy = (value: unknown) => {
   // 空字符串 、 null、 undefined返回true  ; 0和false 要保留不删除
@@ -41,7 +41,7 @@ export const useDocumentTitle = (
   title: string,
   keeponUnmount: boolean = true,
 ) => {
-  const oldTitle = document.title;
+  const oldTitle = useRef(document.title).current;
 
   useEffect(() => {
     document.title = title;
@@ -53,6 +53,5 @@ export const useDocumentTitle = (
         document.title = oldTitle;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [oldTitle, keeponUnmount]);
 };
