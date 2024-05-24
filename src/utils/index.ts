@@ -36,3 +36,23 @@ export const useDebounce = <V>(params: V, delay?: number) => {
   }, [params, delay]);
   return debounceParams;
 };
+
+export const useDocumentTitle = (
+  title: string,
+  keeponUnmount: boolean = true,
+) => {
+  const oldTitle = document.title;
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useEffect(() => {
+    return () => {
+      if (!keeponUnmount) {
+        document.title = oldTitle;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+};

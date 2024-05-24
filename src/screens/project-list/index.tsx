@@ -1,4 +1,4 @@
-import { useDebounce } from "utils";
+import { useDebounce, useDocumentTitle } from "utils";
 import { List } from "./list";
 import { SearchPannel } from "./search-pannel";
 import { useState } from "react";
@@ -12,7 +12,7 @@ export const ProjectListScreen = () => {
     name: "",
     personId: "",
   });
-
+  useDocumentTitle("项目列表", false);
   const debounceParams = useDebounce(params, 2000);
   const { error, data: list, isLoading } = useProjects(debounceParams);
   const { data: users } = useUsers();
