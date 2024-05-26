@@ -3,7 +3,7 @@ import { IUser } from "./search-pannel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
-import { useEidtProjects } from "utils/use-projects";
+import { useEditProjects } from "utils/use-projects";
 
 export interface IProject {
   id: number;
@@ -16,12 +16,14 @@ export interface IProject {
 
 interface IListProps extends TableProps<IProject> {
   users: IUser[];
+  refresh: () => void;
 }
 
 export const List = ({ users, ...props }: IListProps) => {
-  const { mutate } = useEidtProjects();
+  const { mutate } = useEditProjects();
 
-  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+  const pinProject = (id: number) => (pin: boolean) =>
+    mutate({ id, pin }).then(props.refresh);
 
   return (
     <Table

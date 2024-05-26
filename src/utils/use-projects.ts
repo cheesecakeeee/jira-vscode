@@ -8,8 +8,13 @@ import { cleanObject } from "utils";
 export const useProjects = (params: Partial<IProject>) => {
   const { run, ...result } = useAsync<IProject[]>();
   const client = useHttp();
+  // 获取列表的http请求返回的是promise
+  const fetchProjectPromise = () =>
+    client("projects", { data: cleanObject(params) });
+
+  // run接收 获取列表的http请求的promise，并且把这个promise传给run
   useEffect(() => {
-    run(client("projects", { data: cleanObject(params) }));
+    run(fetchProjectPromise(), { retry: fetchProjectPromise });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
 
@@ -17,12 +22,12 @@ export const useProjects = (params: Partial<IProject>) => {
 };
 
 // 编辑列表
-export const useEidtProjects = () => {
+export const useEditProjects = () => {
   const { run, ...result } = useAsync();
   const client = useHttp();
 
   const mutate = (params: Partial<IProject>) => {
-    run(
+    return run(
       client(`projects/${params.id}`, {
         data: cleanObject(params),
         method: "PATCH",
@@ -42,7 +47,7 @@ export const useAddProjects = () => {
   const client = useHttp();
 
   const mutate = (params: Partial<IProject>) => {
-    run(
+    return run(
       client(`projects/${params.id}`, {
         data: cleanObject(params),
         method: "POST",
