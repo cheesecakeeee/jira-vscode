@@ -2,6 +2,8 @@ import { Table, TableProps } from "antd";
 import { IUser } from "./search-pannel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import { Pin } from "components/pin";
+import { useEidtProjects } from "utils/use-projects";
 
 export interface IProject {
   id: number;
@@ -17,11 +19,26 @@ interface IListProps extends TableProps<IProject> {
 }
 
 export const List = ({ users, ...props }: IListProps) => {
+  const { mutate } = useEidtProjects();
+
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+
   return (
     <Table
       pagination={false}
       rowKey="id"
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          render(value, project) {
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckChanged={pinProject(project.id)}
+              />
+            );
+          },
+        },
         {
           title: "名称",
           sorter: (a, b) => a.name.localeCompare(b.name),
