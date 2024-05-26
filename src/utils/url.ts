@@ -16,7 +16,7 @@ export const useUrlQueryParams = <K extends string>(keys: K[]) => {
           (prevKey, nextKey) => {
             return { ...prevKey, [nextKey]: searchParams.get(nextKey) || "" };
           },
-          {} as { [nextKey in K]: K },
+          {} as { [nextKey in K]: string },
         ),
       // searchParams 只有显式调用setSearchParams才会变化因此可以作为依赖项
       // eslint-disable-next-line react-hooks/exhaustive-deps
