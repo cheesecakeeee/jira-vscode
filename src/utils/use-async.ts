@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMountedRef } from "utils";
 
 interface State<D> {
@@ -34,52 +34,56 @@ export const useAsync = <D>(
   const [retry, setRetry] = useState(() => () => {});
   const mountedRef = useMountedRef();
 
-  const setData = (data: D) =>
-    setState({
-      data,
-      error: null,
-      stat: "success",
-    });
+  const setData = useCallback(
+    (data: D) =>
+      setState({
+        data,
+        error: null,
+        stat: "success",
+      }),
+    [],
+  );
 
-  const setError = (error: Error) =>
-    setState({
-      data: null,
-      error,
-      stat: "error",
-    });
+  const setError = useCallback(
+    (error: Error) =>
+      setState({
+        data: null,
+        error,
+        stat: "error",
+      }),
+    [],
+  );
 
-  const run = async (
-    promise: Promise<D>,
-    runConfig?: { retry: () => Promise<D> },
-  ) => {
-    if (!promise || !promise.then) {
-      throw new Error("请传入promise");
-    }
-    // setRetry也会有惰性初始化会自动执行函数，所以也要嵌套一层函数，
-    // 每次执行promise都保存起来，但没有获得promise执行结果，
-    // 要传入promise执行体，才能在retry并执行成功上一次promise的结果
-    setRetry(() => () => {
-      if (runConfig?.retry) {
-        // 递归调用run，透传runConfig，使具有runConfig参数的run方法允许重新调用
-        run(runConfig?.retry(), runConfig);
+  const run = useCallback(
+    async (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      if (!promise || !promise.then) {
+        throw new Error("请传入promise");
       }
-    });
-
-    setState({ ...state, stat: "loading" });
-
-    return promise
-      .then((data) => {
-        if (mountedRef.current) setData(data);
-        return data;
-      })
-      .catch((error) => {
-        setError(error);
-        console.log(config);
-        if (config.throwOnError) return Promise.reject(error);
-        return error;
+      // setRetry也会有惰性初始化会自动执行函数，所以也要嵌套一层函数，
+      // 每次执行promise都保存起来，但没有获得promise执行结果，
+      // 要传入promise执行体，才能在retry并执行成功上一次promise的结果
+      setRetry(() => () => {
+        if (runConfig?.retry) {
+          // 递归调用run，透传runConfig，使具有runConfig参数的run方法允许重新调用
+          run(runConfig?.retry(), runConfig);
+        }
       });
-  };
 
+      setState((preState) => ({ ...preState, stat: "loading" }));
+
+      return promise
+        .then((data) => {
+          if (mountedRef.current) setData(data);
+          return data;
+        })
+        .catch((error) => {
+          setError(error);
+          if (config.throwOnError) return Promise.reject(error);
+          return error;
+        });
+    },
+    [config.throwOnError, mountedRef, setData, setError],
+  );
   return {
     run,
     retry,

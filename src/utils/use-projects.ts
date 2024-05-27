@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useHttp } from "./http";
 import { useAsync } from "./use-async";
 import { IProject } from "screens/project-list/list";
@@ -9,14 +9,15 @@ export const useProjects = (params: Partial<IProject>) => {
   const { run, ...result } = useAsync<IProject[]>();
   const client = useHttp();
   // 获取列表的http请求返回的是promise
-  const fetchProjectPromise = () =>
-    client("projects", { data: cleanObject(params) });
+  const fetchProjectPromise = useCallback(
+    () => client("projects", { data: cleanObject(params) }),
+    [client, params],
+  );
 
   // run接收 获取列表的http请求的promise，并且把这个promise传给run
   useEffect(() => {
     run(fetchProjectPromise(), { retry: fetchProjectPromise });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params, run, fetchProjectPromise]);
 
   return result;
 };
