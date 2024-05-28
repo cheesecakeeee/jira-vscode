@@ -6,8 +6,11 @@ import { Typography } from "antd";
 import { useProjects } from "utils/use-projects";
 import { useUsers } from "utils/use-users";
 import { useProjectSearchParams } from "./util";
+import { Row } from "components/lib";
 
-export const ProjectListScreen = () => {
+export const ProjectListScreen = (props: {
+  createProjectButton: JSX.Element;
+}) => {
   useDocumentTitle("项目列表", false);
 
   const [params, setParams] = useProjectSearchParams();
@@ -23,7 +26,10 @@ export const ProjectListScreen = () => {
 
   return (
     <Container>
-      <h1>项目列表</h1>
+      <Row between={true}>
+        <h1>项目列表</h1>
+        {props.createProjectButton}
+      </Row>
       {error ? (
         <Typography.Text type="danger">{error.message}</Typography.Text>
       ) : null}

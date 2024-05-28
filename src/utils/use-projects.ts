@@ -5,12 +5,12 @@ import { IProject } from "screens/project-list/list";
 import { cleanObject } from "utils";
 
 // 获取列表
-export const useProjects = (params: Partial<IProject>) => {
+export const useProjects = (params?: Partial<IProject>) => {
   const { run, ...result } = useAsync<IProject[]>();
   const client = useHttp();
   // 获取列表的http请求返回的是promise
   const fetchProjectPromise = useCallback(
-    () => client("projects", { data: cleanObject(params) }),
+    () => client("projects", { data: cleanObject(params || {}) }),
     [client, params],
   );
 
