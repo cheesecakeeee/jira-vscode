@@ -17,7 +17,7 @@ const defaultConfig = {
   throwOnError: false,
 };
 
-// ???
+// ???通过useMountedRef标记，只有挂载组件才去渲染执行dispatch
 const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
   const mountedRef = useMountedRef();
 
@@ -45,11 +45,12 @@ export const useAsync = <D>(
 
   // useState传入函数时要嵌套一层函数，避免函数惰性初始化执行
   const [retry, setRetry] = useState(() => () => {});
-  // ???
+  // ??? 把操作数据的方法传入hook中，返回只有挂载才操作数据的函数
   const safeDispatch = useSafeDispatch(dispatch);
 
   const setData = useCallback(
     (data: D) =>
+      // 设置数据通过封装后的dispatch触发
       safeDispatch({
         data,
         error: null,
@@ -83,7 +84,8 @@ export const useAsync = <D>(
         }
       });
 
-      // ???
+      // ???设置数据 通过封装后的dispatch触发
+      // useReducer内部的action已经操作了state数据，即其他新数据只要传入dispatch即可被内部的action解构并设置到新state中
       safeDispatch({ stat: "loading" });
 
       return promise
