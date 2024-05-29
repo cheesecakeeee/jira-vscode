@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { useMountedRef } from "utils";
 
 interface State<D> {
@@ -17,6 +17,16 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+// ???
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef],
+  );
+};
+
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig,
@@ -25,33 +35,37 @@ export const useAsync = <D>(
     ...defaultConfig,
     ...initialConfig,
   };
-  const [state, setState] = useState({
-    ...defaultIntialState,
-    ...initialState,
-  });
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...defaultIntialState,
+      ...initialState,
+    },
+  );
 
   // useState传入函数时要嵌套一层函数，避免函数惰性初始化执行
   const [retry, setRetry] = useState(() => () => {});
-  const mountedRef = useMountedRef();
+  // ???
+  const safeDispatch = useSafeDispatch(dispatch);
 
   const setData = useCallback(
     (data: D) =>
-      setState({
+      safeDispatch({
         data,
         error: null,
         stat: "success",
       }),
-    [],
+    [safeDispatch],
   );
 
   const setError = useCallback(
     (error: Error) =>
-      setState({
+      safeDispatch({
         data: null,
         error,
         stat: "error",
       }),
-    [],
+    [safeDispatch],
   );
 
   const run = useCallback(
@@ -69,11 +83,12 @@ export const useAsync = <D>(
         }
       });
 
-      setState((preState) => ({ ...preState, stat: "loading" }));
+      // ???
+      safeDispatch({ stat: "loading" });
 
       return promise
         .then((data) => {
-          if (mountedRef.current) setData(data);
+          setData(data);
           return data;
         })
         .catch((error) => {
@@ -82,7 +97,7 @@ export const useAsync = <D>(
           return error;
         });
     },
-    [config.throwOnError, mountedRef, setData, setError],
+    [config.throwOnError, setData, setError, safeDispatch],
   );
   return {
     run,

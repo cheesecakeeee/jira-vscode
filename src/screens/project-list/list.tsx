@@ -1,9 +1,10 @@
-import { Table, TableProps } from "antd";
+import { Dropdown, Table, TableProps } from "antd";
 import { IUser } from "./search-pannel";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProjects } from "utils/use-projects";
+import { ButtonNoPadding } from "components/lib";
 
 export interface IProject {
   id: number;
@@ -77,6 +78,32 @@ export const List = ({ users, ...props }: IListProps) => {
                   ? dayjs(project.created).format("YYYY-MM-DD")
                   : "无"}
               </span>
+            );
+          },
+        },
+        {
+          render() {
+            return (
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "edit",
+                      label: (
+                        <ButtonNoPadding type="link">编辑</ButtonNoPadding>
+                      ),
+                    },
+                    {
+                      key: "delete",
+                      label: (
+                        <ButtonNoPadding type="link">删除</ButtonNoPadding>
+                      ),
+                    },
+                  ],
+                }}
+              >
+                <ButtonNoPadding type="link">...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },
