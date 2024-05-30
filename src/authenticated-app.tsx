@@ -10,32 +10,19 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { resetRoute } from "utils";
 import { ProjectPopover } from "components/project-popover";
 import { ProjectModal } from "screens/project-list/project-modal";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "screens/project-list/project-list.slice";
 export const AuthenticatedApp = () => {
-  const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+
   return (
     <Container>
-      <PageHeader
-        createProjectButton={
-          <ButtonNoPadding type={"link"} onClick={() => setShowModal(true)}>
-            创建项目
-          </ButtonNoPadding>
-        }
-      ></PageHeader>
+      <PageHeader></PageHeader>
       <Main>
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/projects" replace />} />
-            <Route
-              path="/projects"
-              element={
-                <ProjectListScreen
-                  createProjectButton={
-                    <Button onClick={() => setShowModal(true)}>创建项目</Button>
-                  }
-                />
-              }
-            ></Route>
+            <Route path="/projects" element={<ProjectListScreen />}></Route>
             <Route
               path="/projects/:projectId/*"
               element={<ProjectScreen />}
@@ -43,14 +30,11 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
-      <ProjectModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-      ></ProjectModal>
+      <ProjectModal />
     </Container>
   );
 };
-const PageHeader = (props: { createProjectButton: JSX.Element }) => {
+const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
@@ -60,7 +44,7 @@ const PageHeader = (props: { createProjectButton: JSX.Element }) => {
             color={"rgb(38, 132,255"}
           ></SoftwareLogo>
         </ButtonNoPadding>
-        <ProjectPopover {...props}></ProjectPopover>
+        <ProjectPopover></ProjectPopover>
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

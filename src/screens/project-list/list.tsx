@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProjects } from "utils/use-projects";
 import { ButtonNoPadding } from "components/lib";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 
 export interface IProject {
   id: number;
@@ -25,6 +27,8 @@ export const List = ({ users, ...props }: IListProps) => {
 
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(props.refresh);
+
+  const dispatch = useDispatch();
 
   return (
     <Table
@@ -90,7 +94,14 @@ export const List = ({ users, ...props }: IListProps) => {
                     {
                       key: "edit",
                       label: (
-                        <ButtonNoPadding type="link">编辑</ButtonNoPadding>
+                        <ButtonNoPadding
+                          type="link"
+                          onClick={() =>
+                            dispatch(projectListActions.openProjectModal())
+                          }
+                        >
+                          编辑
+                        </ButtonNoPadding>
                       ),
                     },
                     {

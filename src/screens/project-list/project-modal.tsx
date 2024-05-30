@@ -1,12 +1,18 @@
 import { Drawer } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { projectListActions } from "./project-list.slice";
+import { selectProjectModalOpen } from "store";
 
-export const ProjectModal = (props: {
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  const { isOpen, onClose } = props;
+export const ProjectModal = () => {
+  const dispatch = useDispatch();
+  const projectModalOpen = useSelector(selectProjectModalOpen);
+
   return (
-    <Drawer open={isOpen} onClose={onClose} width={"100vw"}>
+    <Drawer
+      open={projectModalOpen}
+      onClose={() => dispatch(projectListActions.closeProjectModal())}
+      width={"100vw"}
+    >
       <p>Some contents...</p>
     </Drawer>
   );
