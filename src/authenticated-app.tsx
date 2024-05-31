@@ -10,11 +10,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { resetRoute } from "utils";
 import { ProjectPopover } from "components/project-popover";
 import { ProjectModal } from "screens/project-list/project-modal";
-import { useDispatch } from "react-redux";
-import { projectListActions } from "screens/project-list/project-list.slice";
-export const AuthenticatedApp = () => {
-  const dispatch = useDispatch();
 
+export const AuthenticatedApp = () => {
   return (
     <Container>
       <PageHeader></PageHeader>
