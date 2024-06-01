@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useEditProjects } from "utils/use-projects";
 import { ButtonNoPadding } from "components/lib";
+import { useProjectModalParams } from "./util";
 
 export interface IProject {
   id: number;
@@ -25,6 +26,8 @@ export const List = ({ users, ...props }: IListProps) => {
 
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then(props.refresh);
+
+  const { open } = useProjectModalParams();
 
   return (
     <Table
@@ -90,7 +93,9 @@ export const List = ({ users, ...props }: IListProps) => {
                     {
                       key: "edit",
                       label: (
-                        <ButtonNoPadding type="link">编辑</ButtonNoPadding>
+                        <ButtonNoPadding type="link" onClick={open}>
+                          编辑
+                        </ButtonNoPadding>
                       ),
                     },
                     {

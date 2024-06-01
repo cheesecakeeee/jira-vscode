@@ -2,15 +2,13 @@ import { useDebounce, useDocumentTitle } from "utils";
 import { List } from "./list";
 import { SearchPannel } from "./search-pannel";
 import styled from "@emotion/styled";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { useProjects } from "utils/use-projects";
 import { useUsers } from "utils/use-users";
-import { useProjectSearchParams } from "./util";
+import { useProjectModalParams, useProjectSearchParams } from "./util";
 import { Row } from "components/lib";
 
-export const ProjectListScreen = (props: {
-  createProjectButton: JSX.Element;
-}) => {
+export const ProjectListScreen = () => {
   useDocumentTitle("项目列表", false);
 
   const [params, setParams] = useProjectSearchParams();
@@ -24,11 +22,12 @@ export const ProjectListScreen = (props: {
 
   const { data: users } = useUsers();
 
+  const { open } = useProjectModalParams();
   return (
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        {props.createProjectButton}
+        <Button onClick={open}>创建项目</Button>
       </Row>
       {error ? (
         <Typography.Text type="danger">{error.message}</Typography.Text>
