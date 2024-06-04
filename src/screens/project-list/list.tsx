@@ -18,16 +18,16 @@ export interface IProject {
 
 interface IListProps extends TableProps<IProject> {
   users: IUser[];
-  refresh: () => void;
 }
 
 export const List = ({ users, ...props }: IListProps) => {
   const { mutate } = useEditProjects();
 
-  const pinProject = (id: number) => (pin: boolean) =>
-    mutate({ id, pin }).then(props.refresh);
+  const { startEdit } = useProjectModalParams();
 
-  const { open } = useProjectModalParams();
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
+
+  const editProject = (id: number) => () => startEdit(id);
 
   return (
     <Table
@@ -85,7 +85,7 @@ export const List = ({ users, ...props }: IListProps) => {
           },
         },
         {
-          render() {
+          render(value: any, project: IProject) {
             return (
               <Dropdown
                 menu={{
@@ -93,7 +93,10 @@ export const List = ({ users, ...props }: IListProps) => {
                     {
                       key: "edit",
                       label: (
-                        <ButtonNoPadding type="link" onClick={open}>
+                        <ButtonNoPadding
+                          type="link"
+                          onClick={editProject(project.id)}
+                        >
                           编辑
                         </ButtonNoPadding>
                       ),
