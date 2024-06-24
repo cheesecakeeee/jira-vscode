@@ -1,5 +1,5 @@
 import { Button, Drawer, Form, Input, Spin } from "antd";
-import { useProjectModalParams } from "./util";
+import { useProjectModalParams, useProjectsQueryKey } from "./util";
 import { UserSelect } from "components/user-select";
 import { useAddProjects, useEditProjects } from "utils/use-projects";
 import { useForm } from "antd/es/form/Form";
@@ -15,7 +15,12 @@ export const ProjectModal = () => {
 
   const useMutateProject = projectDetails ? useEditProjects : useAddProjects;
 
-  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject();
+  const {
+    mutateAsync,
+    error,
+    isLoading: mutateLoading,
+  } = useMutateProject(useProjectsQueryKey());
+
   const [form] = useForm();
   const onFinish = (values: any) => {
     mutateAsync({ ...projectDetails, ...values }).then(() => {
@@ -26,6 +31,7 @@ export const ProjectModal = () => {
 
   // 如果详情和表单发生变化重置表单？？？？
   useEffect(() => {
+    form.resetFields();
     form.setFieldsValue(projectDetails);
   }, [projectDetails, form]);
 
