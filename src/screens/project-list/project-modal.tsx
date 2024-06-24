@@ -29,16 +29,20 @@ export const ProjectModal = () => {
     });
   };
 
+  const closeModal = () => {
+    form.resetFields();
+    close();
+  };
+
   // 如果详情和表单发生变化重置表单？？？？
   useEffect(() => {
-    form.resetFields();
     form.setFieldsValue(projectDetails);
   }, [projectDetails, form]);
 
   return (
     <Drawer
       open={projectModalOpen}
-      onClose={close}
+      onClose={closeModal}
       width={"100vw"}
       forceRender={true}
     >
