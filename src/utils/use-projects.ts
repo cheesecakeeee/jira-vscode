@@ -1,5 +1,5 @@
 import { useHttp } from "./http";
-import { IProject } from "screens/project-list/list";
+import { IProject } from "types/IProject";
 import { cleanObject } from "utils";
 import { useMutation, useQuery, QueryKey } from "react-query";
 import {

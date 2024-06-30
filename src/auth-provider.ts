@@ -1,4 +1,4 @@
-import { IUser } from "screens/project-list/search-pannel";
+import { IUser } from "types/IUser";
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const localStorageKey = "__auth_prodiver_token__";

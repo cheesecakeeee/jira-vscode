@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext } from "react";
 import * as Auth from "auth-provider";
-import { IUser } from "screens/project-list/search-pannel";
+import { IUser } from "types/IUser";
 import * as auth from "../auth-provider";
 import { http } from "utils/http";
 import { useMount } from "utils";

@@ -1,20 +1,12 @@
 import { Dropdown, Modal, Table, TableProps } from "antd";
-import { IUser } from "./search-pannel";
+import { IUser } from "types/IUser";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Pin } from "components/pin";
 import { useDeleteProjects, useEditProjects } from "utils/use-projects";
 import { ButtonNoPadding } from "components/lib";
 import { useProjectModalParams, useProjectsQueryKey } from "./util";
-
-export interface IProject {
-  id: number;
-  name: string;
-  personId: number;
-  organization: string;
-  created: number;
-  pin: boolean;
-}
+import { IProject } from "types/IProject";
 
 interface IListProps extends TableProps<IProject> {
   users: IUser[];

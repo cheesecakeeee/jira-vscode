@@ -1,4 +1,4 @@
-import { IUser } from "screens/project-list/search-pannel";
+import { IUser } from "types/IUser";
 import { useAsync } from "./use-async";
 import { useMount } from "utils";
 import { useHttp } from "./http";
